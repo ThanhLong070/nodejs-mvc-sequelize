@@ -22,8 +22,6 @@ exports.postLogin = async (req, res) => {
   try {
     const { session, body } = req;
 
-    console.log('Body:', body);
-
     const data = await authService.checkUser(session, body);
 
     return res.send(data);  

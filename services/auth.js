@@ -39,7 +39,6 @@ exports.register = async ({ email, password, passwordConfirmation }) => {
 };
 
 exports.checkUser = async (session, { email, password }) => {
-  console.log(email, password);
   const user = await User.findOne({ where: { email } });
   if (!user) return 'User is not exist';
   const isTruePassword = await compare(password, user.password);

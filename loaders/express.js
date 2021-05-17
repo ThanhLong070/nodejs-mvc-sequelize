@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const engine = require('ejs-mate');
 
-const routes = require('../routes');
 const Logger = require('./logger');
 
 module.exports = (app) => {
@@ -12,10 +11,10 @@ module.exports = (app) => {
   app.head('/status', (req, res) => {
     res.status(200).end();
   });
-  
+
   app.enable('trust proxy');
 
-  // use ejs-locals for all ejs templates
+  // use ejs-locals for all ejs templates:
   app.engine('ejs', engine);
 
   // register view engine
@@ -24,20 +23,20 @@ module.exports = (app) => {
   // Use JSON, XML, urlencoded
   app.use(express.static('public'));
   app.use(express.json());
-  app.use(express.urlencoded({ extended: false }));
+  app.use(
+    express.urlencoded({
+      extended: false,
+    })
+  );
 
   app.use(cors());
 
-  // Load API routes
-  app.use('/', routes());
-
-  // / catch 404 and forward to error handler
   app.use((req, res, next) => {
     const err = new Error('Not Found');
     err.status = 404;
     next(err);
   });
-  
+
   app.use((err, req, res, next) => {
     Logger.error(`🔥 [  ${req.path}  ] : ${err.message} `);
 
