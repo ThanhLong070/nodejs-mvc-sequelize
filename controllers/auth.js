@@ -1,6 +1,4 @@
 const authService = require('../services/auth');
-const User = require('../models/User');
-const { compare } = require('bcryptjs');
 
 exports.register = async (req, res) => {
   try {
@@ -10,7 +8,7 @@ exports.register = async (req, res) => {
   
     const data = await authService.register(body);
 
-    return res.json({ ...DATA, data });
+    return res.json({ data });
   } catch (error) {
     throw error;
   }
@@ -22,17 +20,13 @@ exports.getLogin = (req, res) => {
 
 exports.postLogin = async (req, res) => {
   try {
-    const { body } = req;
+    const { session, body } = req;
 
     console.log('Body:', body);
 
-    const user = await User.findOne({ where: { email: body.email } });
-    if (!user) return 'User is not exist';
-    const isTruePassword = await compare(body.password, user.password);
-    if (!isTruePassword) return 'Password is not found!';
+    const data = await authService.checkUser(session, body);
 
-    req.session.user = user;
-    return res.send(user);  
+    return res.send(data);  
   } catch (error) {
     throw error;
   }
