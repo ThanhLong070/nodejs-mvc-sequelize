@@ -7,7 +7,7 @@ exports.index = async (req, res) => {
     const data = await homeService.getUser(user);
 
     return res.render('parts/home', {
-      title: 'Trang chủ',
+      title: 'Home Page',
       data,
     });
     } catch (error) {
